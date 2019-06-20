@@ -121,5 +121,7 @@ function plugins() {
     echo $plugins
 }
 
+# This was needed to resolve an issue where tab completion was not working
+# See github issue: https://github.com/docker/cli/issues/263
 autoload -Uz compinit
 compinit
