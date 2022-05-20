@@ -4,11 +4,49 @@
 #Enabling the CDK CLI
 export PATH=/usr/local/opt/sphinx-doc/bin:/usr/local/Cellar/node/12.10.0/bin:$PATH
 
+#Couchbase
+export PATH=$PATH:/Applications/Couchbase\ Server.app/Contents/Resources/couchbase-core/bin
+
+#GO
+export GOPATH=~/go
+export PATH=$PATH:$GOPATH
+export PATH=$PATH:$GOPATH/bin
+
+#Homebrew path
+export=PATH=$PATH:/usr/local/Cellar
+
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/req89251/.oh-my-zsh"
+export ZSH="/Users/sean.cheevers.getweave/.oh-my-zsh"
 
 # Exporting a default AWS Region
 export AWS_REGION="us-east-1"
+
+#Google Cloud
+source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+
+#Kubernetes
+alias k="kubectl"
+alias kcc='kubectl config current-context'
+alias kdp='kubectl delete po'
+alias kgc='kubectl config get-contexts'
+alias kge='kubectl get events --sort-by='\''{.lastTimestamp}'\'
+alias kgp='kubectl get po'
+alias kl='kubectl logs '
+alias kpf='kubectl port-forward'
+alias ksc='kubectl config use-context'
+alias mk="minikube kubectl --"
+source <(kubectl completion zsh)
+
+#Usage:
+#➜  ~ ksn dev1                                                       (dev-context/dev1)
+#     Context "dev-context" modified.
+#     Namespace: dev1
+
+#➜  ~ ksn ff                                                         (dev-context/dev1)
+#     Error from server (NotFound): namespaces "ff" not found
+alias ksn='_f(){k get namespace $1 > /dev/null; if [ $? -eq 1 ]; then return $?; fi;  k config set-context $(k config current-context) --namespace=$1; echo "Namespace: $1"};_f'
+
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -57,8 +95,6 @@ ZSH_THEME="robbyrussell"
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
 # You can set one of the optional three formats:
 # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
@@ -74,7 +110,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git docker svn colored-man colorize pip python brew osx zsh-syntax-highlighting zsh-autosuggestions)
+plugins=(git docker svn colored-man colorize pip python brew osx zsh-syntax-highlighting zsh-autosuggestions kubetail)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -142,3 +178,10 @@ compinit
 # tabtab source for slss package
 # uninstall by removing these lines or running `tabtab uninstall slss`
 [[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh
+[[ /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin/kubectl ]] && source <(kubectl completion zsh)
+
+. /usr/local/opt/asdf/asdf.sh
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
