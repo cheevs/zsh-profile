@@ -1,3 +1,6 @@
+#Hide user in terminal
+export DEFAULT_USER="$(whoami)"
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
@@ -16,14 +19,16 @@ export PATH=$PATH:$GOPATH/bin
 export=PATH=$PATH:/usr/local/Cellar
 
 # Path to your oh-my-zsh installation.
-export ZSH="/Users/sean.cheevers.getweave/.oh-my-zsh"
+export ZSH="~/.oh-my-zsh"
 
 # Exporting a default AWS Region
 export AWS_REGION="us-east-1"
 
 #Google Cloud
-source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
-source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
+#source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
+#source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 
 #Kubernetes
 alias k="kubectl"
@@ -37,6 +42,12 @@ alias kpf='kubectl port-forward'
 alias ksc='kubectl config use-context'
 alias mk="minikube kubectl --"
 source <(kubectl completion zsh)
+
+#Krew path
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+source "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh"
+PROMPT='$(kube_ps1)'
 
 #Usage:
 #➜  ~ ksn dev1                                                       (dev-context/dev1)
@@ -52,7 +63,7 @@ alias ksn='_f(){k get namespace $1 > /dev/null; if [ $? -eq 1 ]; then return $?;
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+#ZSH_THEME="robbyrussell"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -110,7 +121,7 @@ ZSH_THEME="robbyrussell"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git docker svn colored-man colorize pip python brew osx zsh-syntax-highlighting zsh-autosuggestions kubetail)
+plugins=(git docker svn colorize pip python brew macos kubectl)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -178,10 +189,22 @@ compinit
 # tabtab source for slss package
 # uninstall by removing these lines or running `tabtab uninstall slss`
 [[ -f /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh ]] && . /usr/local/lib/node_modules/serverless/node_modules/tabtab/.completions/slss.zsh
-[[ /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin/kubectl ]] && source <(kubectl completion zsh)
+[[ /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin/kubectl ]]
 
-. /usr/local/opt/asdf/asdf.sh
+#ASDF
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+if type brew &>/dev/null
+then
+  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+
+  autoload -Uz compinit
+  compinit
+fi
+
+# Created by `pipx` on 2022-06-15 21:58:25
+export PATH="$PATH:/Users/sean.cheevers/.local/bin"
