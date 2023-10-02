@@ -1,34 +1,40 @@
 #Hide user in terminal
 export DEFAULT_USER="$(whoami)"
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+# Path to your oh-my-zsh installation.
+export ZSH=~/.oh-my-zsh
 
-#Enabling the CDK CLI
-export PATH=/usr/local/opt/sphinx-doc/bin:/usr/local/Cellar/node/12.10.0/bin:$PATH
+plugins=(git docker colorize pip python kubectl kube-ps1 kubectx zsh-autosuggestions)
+#autoload -U compinit && compinit
+source $ZSH/oh-my-zsh.sh
 
-#Couchbase
-export PATH=$PATH:/Applications/Couchbase\ Server.app/Contents/Resources/couchbase-core/bin
+#fpath+=${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions/src
+
+#GPG
+GPG_TTY=$(tty)
+export GPG_TTY
 
 #GO
 export GOPATH=~/go
 export PATH=$PATH:$GOPATH
 export PATH=$PATH:$GOPATH/bin
+export CGO_ENABLED=1
+export GOMOD111=on
+export GO111MODULE=on
+export GOPRIVATE=golang.frontdoorhome.com/*,go.ftdr.com/*
+
+#PYTHON PYTEST
+export PATH=$PATH:/home/seancheevers/.local/bin
+
+#DOTNET
+export DOTNET_ROOT=$HOME/.dotnet
+export PATH=$PATH:$HOME/.dotnet:$HOME/.dotnet/tools
 
 #Homebrew path
 export=PATH=$PATH:/usr/local/Cellar
 
-# Path to your oh-my-zsh installation.
-export ZSH="~/.oh-my-zsh"
-
 # Exporting a default AWS Region
 export AWS_REGION="us-east-1"
-
-#Google Cloud
-source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
-#source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
-source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc"
-#source "$(brew --prefix)/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 
 #Kubernetes
 alias k="kubectl"
@@ -43,11 +49,14 @@ alias ksc='kubectl config use-context'
 alias mk="minikube kubectl --"
 source <(kubectl completion zsh)
 
+#GCP
+export USE_GKE_GCLOUD_AUTH_PLUGIN=True
+
 #Krew path
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
-source "/opt/homebrew/opt/kube-ps1/share/kube-ps1.sh"
-PROMPT='$(kube_ps1)'
+source ~/sandbox/kube-ps1/kube-ps1.sh
+PROMPT='$(kube_ps1) '
 
 #Usage:
 #➜  ~ ksn dev1                                                       (dev-context/dev1)
@@ -58,72 +67,6 @@ PROMPT='$(kube_ps1)'
 #     Error from server (NotFound): namespaces "ff" not found
 alias ksn='_f(){k get namespace $1 > /dev/null; if [ $? -eq 1 ]; then return $?; fi;  k config set-context $(k config current-context) --namespace=$1; echo "Namespace: $1"};_f'
 
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="robbyrussell"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS=true
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(git docker svn colorize pip python brew macos kubectl)
-
-source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
@@ -192,7 +135,7 @@ compinit
 [[ /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/bin/kubectl ]]
 
 #ASDF
-. /opt/homebrew/opt/asdf/libexec/asdf.sh
+#. /opt/homebrew/opt/asdf/libexec/asdf.sh
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
@@ -208,3 +151,9 @@ fi
 
 # Created by `pipx` on 2022-06-15 21:58:25
 export PATH="$PATH:/Users/sean.cheevers/.local/bin"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/seancheevers/sandbox/google-cloud-sdk/path.zsh.inc' ]; then . '/home/seancheevers/sandbox/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/seancheevers/sandbox/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/seancheevers/sandbox/google-cloud-sdk/completion.zsh.inc'; fi
